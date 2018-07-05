@@ -15,6 +15,9 @@ public:
     void PollEvents() const;
     void SwapBuffers() const;
 
+    static void CheckIfEscPressed(GLFWwindow* window,
+        int key, int scanCode, int action, int mods);
+
 private:
     GLFWwindow* window;
 };

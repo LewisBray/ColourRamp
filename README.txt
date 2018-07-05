@@ -39,6 +39,3 @@ lot of the OpenGL code and breaks it down to the general algorithm whilst
 providing resource management (deleting buffers in constructors, etc...).  In a
 project like a game engine these classes would need to be more flexible.  This
 project uses GLFW and GLEW to implement OpenGL.
-
-Going forward I need to make it display in full screen and close when the user
-presses 'Esc'.

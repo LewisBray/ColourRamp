@@ -1,6 +1,7 @@
 #include "rgb.h"
 
 #include <algorithm>
+#include <iomanip>
 
 
 // Default constructor.
@@ -14,16 +15,16 @@ RGB::RGB()
 {}
 
 
-// Constructs class from unsigned short holding RGB565 value.
+// Constructs struct from unsigned short holding RGB565 value.
 RGB::RGB(const unsigned short colour)
-    : r{ static_cast<double>(colour >> 11) }
-    , g{ static_cast<double>((colour >> 5) & 0b111111) }
-    , b{ static_cast<double>(colour & 0b11111) }
+    : r{ static_cast<float>(colour >> 11) }
+    , g{ static_cast<float>((colour >> 5) & 0b111111) }
+    , b{ static_cast<float>(colour & 0b11111) }
 {}
 
 
 // Defined to make operator overloading implementations easier.
-RGB::RGB(const double red, const double green, const double blue)
+RGB::RGB(const float red, const float green, const float blue)
     : r{ red }
     , g{ green }
     , b{ blue }
@@ -42,13 +43,13 @@ RGB RGB::operator-(const RGB& other) const
 }
 
 
-RGB RGB::operator*(const double scalar) const
+RGB RGB::operator*(const float scalar) const
 {
     return RGB{ scalar * r, scalar * g, scalar * b };
 }
 
 
-RGB RGB::operator/(const double divisor) const
+RGB RGB::operator/(const float divisor) const
 {
     return RGB{ r / divisor, g / divisor, b / divisor };
 }
@@ -64,12 +65,36 @@ RGB& RGB::operator=(const RGB& other)
 }
 
 
-// Converts the member variables back to a single RGB565 value.
-unsigned short RGB::ToRGB565() const
+// Getter functions that normalise the RGB vals to the range [0, 1]
+float RGB::Red() const
 {
-    const unsigned short red = static_cast<unsigned short>(std::round(r));
-    const unsigned short green = static_cast<unsigned short>(std::round(g));
-    const unsigned short blue = static_cast<unsigned short>(std::round(b));
+    return r / 31;
+}
 
-    return (red << 11) + (green << 5) + blue;
+
+float RGB::Green() const
+{
+    return g / 63;
+}
+
+
+float RGB::Blue() const
+{
+    return b / 31;
+}
+
+
+// Outputs the RGB struct as its unsigned short RGB565 value.
+std::ostream& operator<<(std::ostream& out, const RGB& rgbVals)
+{
+    const unsigned short red = static_cast<unsigned short>(std::round(rgbVals.r));
+    const unsigned short green = static_cast<unsigned short>(std::round(rgbVals.g));
+    const unsigned short blue = static_cast<unsigned short>(std::round(rgbVals.b));
+
+    const unsigned short rgb565 = (red << 11) + (green << 5) + blue;
+
+    out << std::setfill('0') << std::setw(4)
+        << std::uppercase << std::hex << rgb565;
+
+    return out;
 }

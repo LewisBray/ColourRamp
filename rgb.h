@@ -1,24 +1,30 @@
 #pragma once
 
+#include <iostream>
+
 
 // Class for manipulation of RGB565 values.
-class RGB
+struct RGB
 {
 public:
     RGB();
     explicit RGB(const unsigned short colour);
-    explicit RGB(const double red, const double green, const double blue);
+    RGB(const float red, const float green, const float blue);
 
     RGB operator+(const RGB& other) const;
     RGB operator-(const RGB& other) const;
-    RGB operator*(const double scalar) const;
-    RGB operator/(const double divisor) const;
+    RGB operator*(const float scalar) const;
+    RGB operator/(const float divisor) const;
     RGB& operator=(const RGB& other);
 
-    unsigned short ToRGB565() const;
+    float Red() const;
+    float Green() const;
+    float Blue() const;
+
+    friend std::ostream& operator<<(std::ostream& out, const RGB& rgbVals);
 
 private:
-    double r;
-    double g;
-    double b;
+    float r;
+    float g;
+    float b;
 };

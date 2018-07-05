@@ -1,8 +1,8 @@
 #include "inputcheck.h"
+#include "error.h"
 
-#include <regex>
 #include <sstream>
-#include <iostream>
+#include <regex>
 
 
 // Checks if string holds a hexadecimal number.
@@ -13,7 +13,7 @@ static bool IsHex(const char* const arg)
 }
 
 
-// Checks if string holds decimal number.
+// Checks if string holds a decimal number.
 static bool IsDec(const char* const arg)
 {
     std::regex decExpr("-?[0-9]+");
@@ -22,7 +22,8 @@ static bool IsDec(const char* const arg)
 
 
 // Checks user inputs and returns corner RGB565 values for colour ramp.
-CornerColours ParseInputs(const int argc, const char* const argv[])
+std::array<unsigned short, 4>
+ParseInputs(const int argc, const char* const argv[])
 {
     if ((argc < 4) || (argc > 6))
         throw Error("Invalid number of arguments.");
@@ -32,6 +33,7 @@ CornerColours ParseInputs(const int argc, const char* const argv[])
 
     unsigned long long inputNums[4];
     for (int i = 2; i < argc; ++i)  // Check every numerical arg
+    {
         if (IsDec(argv[i])) {
             std::stringstream colour;
             colour << argv[i];
@@ -48,6 +50,7 @@ CornerColours ParseInputs(const int argc, const char* const argv[])
             errMsg += " is not a decimal/hexadecimal number.";
             throw Error{ errMsg };
         }
+    }
 
     for (int i = 2; i < argc; ++i)
     {
@@ -64,9 +67,9 @@ CornerColours ParseInputs(const int argc, const char* const argv[])
         case 5: inputNums[3] = inputNums[1];
     }
 
-    unsigned short rgb565Colours[4];
+    std::array<unsigned short, 4> rgb565Vals;
     for (int i = 0; i < 4; ++i)
-        rgb565Colours[i] = static_cast<unsigned short>(inputNums[i]);
+        rgb565Vals[i] = static_cast<unsigned short>(inputNums[i]);
 
-    return CornerColours{ rgb565Colours };
+    return rgb565Vals;
 }

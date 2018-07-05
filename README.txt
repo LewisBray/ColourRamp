@@ -31,9 +31,14 @@ z values in our case are RGB565 values and so operations like +, *, etc... are
 sensitive to the underlying RGB values and so in order to keep the structure of
 the above formula we create a class for manipulating RGB565 values.
 
-Going forward I'm going to write some unit tests to check that I've got the
-colour ramp logic correct and to make sure I'm parsing inputs correctly.  After
-that I'm going to start implementing the graphical display of the colour ramp
-using shaders in OpenGL (the old version used legacy OpenGL and I'd like to
-learn how to write and use shaders for potentially messing around with game
-engines/programming animations/simulating physical systems/etc...).
+This is now implemented in modern OpenGL.  Unfortunately my laptop doesn't
+support some of the modern OpenGL features (most notably layout locations) but
+it's using shaders which I believe is mostly the point.  The abstractions of the
+OpenGL constructs into classes are not particularly general but it does hide a
+lot of the OpenGL code and breaks it down to the general algorithm whilst
+providing resource management (deleting buffers in constructors, etc...).  In a
+project like a game engine these classes would need to be more flexible.  This
+project uses GLFW and GLEW to implement OpenGL.
+
+Going forward I need to make it display in full screen and close when the user
+presses 'Esc'.

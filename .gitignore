@@ -9,3 +9,6 @@
 *.pdb
 *.tlog
 *.idb
+*.opendb
+x64/Release/ColourRamp.iobj
+*.ipdb

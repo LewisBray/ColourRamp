@@ -1,29 +1,22 @@
 #pragma once
 
 #include "rgb.h"
+#include "program.h"
+#include "vertexarray.h"
+#include "indexbuffer.h"
+#include "vertexbuffer.h"
+
+#include <array>
 
 
-// Holds corner colours with suitable member variable names.
-struct CornerColours
+// Everything needed for drawing a pixel on the screen.
+struct Pixel
 {
-    CornerColours()
-        : topLeft{ 0 }
-        , topRight{ 0 }
-        , bottomLeft{ 0 }
-        , bottomRight{ 0 }
-    {}
-
-    explicit CornerColours(const unsigned short rgb565Vals[4])
-        : topLeft{ rgb565Vals[0] }
-        , topRight{ rgb565Vals[1] }
-        , bottomLeft{ rgb565Vals[2] }
-        , bottomRight{ rgb565Vals[3] }
-    {}
-
-    unsigned short topLeft;
-    unsigned short topRight;
-    unsigned short bottomLeft;
-    unsigned short bottomRight;
+    RGB colourVals;
+    VertexArray vao;
+    VertexBuffer vbo;
+    IndexBuffer ibo;
+    Vertex vertices[4];
 };
 
 
@@ -31,9 +24,13 @@ struct CornerColours
 class ColourRamp
 {
 public:
-    ColourRamp(const CornerColours& rgb565Vals);
-    ~ColourRamp();
+    explicit ColourRamp(const std::array<unsigned short, 4> cornerVals);
+
+    void DrawPixel(const int row, const int col, const Program& shaderProg) const;
+
+    friend std::ostream& operator<<(std::ostream& out, const ColourRamp& display);
 
 private:
-    RGB frameBuffer[9][16];
+    Pixel frameBuffer[9][16];
+    const unsigned sharedIndices[6];    // All pixels use same index buffer
 };

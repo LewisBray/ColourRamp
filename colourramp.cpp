@@ -21,22 +21,18 @@ ColourRamp::ColourRamp(const std::array<unsigned short, 4> cornerVals)
     const RGB c = (bottomLeft - topLeft) / 8;
     const RGB d = (bottomRight - bottomLeft - topRight + topLeft) / 120;
 
-    const float widthStep = 2.0f / 16;
-    const float heightStep = 2.0f / 9;
     for (short y = 0; y < 9; ++y)
-    {
-        // x and y need to be mapped to range [-1, 1]
-        const float mappedY = 1 - (2.0f / 9) * y;
         for (short x = 0; x < 16; ++x)
         {
             Pixel& pixel = frameBuffer[y][x];
             pixel.colourVals = a + b * x + c * y + d * x * y;
 
-            const float mappedX = (2.0f / 16) * x - 1;
-            pixel.vertices[0] = { mappedX, mappedY - heightStep };
-            pixel.vertices[1] = { mappedX + widthStep, mappedY - heightStep };
-            pixel.vertices[2] = { mappedX + widthStep, mappedY };
-            pixel.vertices[3] = { mappedX, mappedY };
+            // Transform of coordinates to [-1, 1] range now
+            // handled in vertex shader by transformation matrix
+            pixel.vertices[0] = { x + 0.0f, y + 0.0f };
+            pixel.vertices[1] = { x + 0.0f, y + 1.0f };
+            pixel.vertices[2] = { x + 1.0f, y + 1.0f };
+            pixel.vertices[3] = { x + 1.0f, y + 0.0f };
 
             pixel.vao.Bind();
             pixel.vbo.Bind();
@@ -44,7 +40,6 @@ ColourRamp::ColourRamp(const std::array<unsigned short, 4> cornerVals)
             pixel.ibo.Bind();
             pixel.ibo.Data(sharedIndices);
         }
-    }
 }
 
 

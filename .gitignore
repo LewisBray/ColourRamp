@@ -1,14 +1,5 @@
-
-.vs/ColourRamp/v15/.suo
-*.db
-*.ipch
+#files
 *.exe
 *.ilk
-*.log
 *.obj
 *.pdb
-*.tlog
-*.idb
-*.opendb
-x64/Release/ColourRamp.iobj
-*.ipdb
